@@ -1,0 +1,13 @@
+# --- INPUTS: Required ---
+input_raster: I:\IMAGERY\AUT_Vienna_PNEO_01Sep2026\AUT_Vienna_PNEO_01Sep2026_RGB_stretched.tif
+mm_name: 1234_5678_040_01122026
+
+# --- EXPORT & CLEANUP: Required ---
+s3_export: false
+remove_local: false # <-- CAUTION: Deletes locally created TMS! ONLY possible after successful s3 upload
+
+# --- DEFAULTS: Optional ---
+min_zoom: 10
+max_zoom: 20
+filetype: webp # <-- webp OR png
+s3_profile: prod
