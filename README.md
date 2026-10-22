@@ -49,14 +49,13 @@ s3_profile: prod
 
 | Parameter | Status | Type | Default | Description |
 |----------|--------|------|---------|-------------|
-| `scene` | Required | `string` | — | Scene identifier used for processing. Mandatory naming convention: `ISO3_Locality_Sensor_Date`. |
-| `input_root` | Required | `string` | — | Root directory containing the input scene data. |
+| `input_raster` | Required | `string` | — |Path to the input RGB raster in `.tif` format. |
 | `mm_name` | Required | `string` | — | Folder name for the upload to the s3 bucket, following the MM naming convention: `Elixir(_)Ticket_NumericISO3_DDMMYYYY`|
 | `s3_export` | Required | `boolean` | `false` | If `true`, upload generated outputs and archive data to the configured S3 buckets. |
 | `remove_local` | Required | `boolean` | `false` | If `true`, remove the input directory and locally generated outputs. ONLY possible if `s3_export`: `true`. |
 | `min_zoom` | Optional | `integer` | `10` | Minimum zoom level of the TMS tiles. |
 | `max_zoom` | Optional | `integer` | `20` | Maximum zoom level of the TMS tiles. |
-| `rft` | Optional | `string` | E:\MDCS\Parameter\RasterFunctionTemplates\Stretching\ITEM_Stretch_PercMinMax_025_05_Stats_AutoGamma_1_255.rft.xml | Stretch raster function template path. |
+| `filetype` | Optional | `string` | `webp` | Tile filetype and metadata content-type. Only `webp` and `png` currently supported.|
 | `s3_profile` | Optional | `string` | `prod` | AWS profile used for S3 authentication and upload operations. |
 
 ## Usage
