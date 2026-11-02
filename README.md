@@ -40,6 +40,8 @@ min_zoom: 10
 max_zoom: 20
 filetype: webp # <-- webp OR png
 s3_profile: prod
+s3_bucket: prod-msf-eo-pub-s3
+s3_prefix: MMP
 ```
 
 ### Parameter reference
@@ -57,6 +59,9 @@ s3_profile: prod
 | `max_zoom` | Optional | `integer` | `20` | Maximum zoom level of the TMS tiles. |
 | `filetype` | Optional | `string` | `webp` | Tile filetype and metadata content-type. Only `webp` and `png` currently supported.|
 | `s3_profile` | Optional | `string` | `prod` | AWS profile used for S3 authentication and upload operations. |
+| `s3_bucket` | Optional | `string` | `prod-msf-eo-pub-s3` | AWS bucket to which the output tiles will be uploaded. |
+| `s3_prefix` | Optional | `string` | `MMP` | AWS prefix ( path) for uploading the tiles. Will be created if does not exist on `s3_bucket`. |
+
 
 ## Usage
 
