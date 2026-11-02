@@ -1,4 +1,4 @@
-# STRETCH AND TILE
+# TMS TILER
 
 This repository converts raster datasets into TMS tiles suitable for web mapping. Optionally, the workflow also publishes the output TMS tiles to S3.
 
