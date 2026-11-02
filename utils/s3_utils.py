@@ -161,53 +161,62 @@ def upload_to_s3(
 ) -> None:
     """
     Upload the contents of the local TMS directory to:
-    s3://prod-msf-eo-pub-s3/MMP/<mm_name>/
+    s3://<s3_bucket>/<s3_prefix>/<mm_name>/
 
     Args:
         local_tms_dir (str): Local TMS output directory.
         config (dict): Parsed YAML configuration. Must contain:
             - s3_profile
+            - s3_bucket
+            - s3_prefix
             - mm_name
             - filetype
         delete_first (bool): If True, delete the S3 prefix before upload.
         max_workers (int): Number of parallel upload workers.
     """
     s3_profile = config.get("s3_profile")
+    s3_bucket = config.get("s3_bucket")
+    s3_prefix = config.get("s3_prefix")
     mm_name = config.get("mm_name")
     filetype = config.get("filetype")
 
     if not s3_profile:
-        raise ValueError("Missing required S3 config value: s3_profile")
+        raise ValueError("Missing required config value: s3_profile")
+    if not s3_bucket or not str(s3_bucket).strip():
+        raise ValueError("Missing required config value: s3_bucket")
+    if not s3_prefix or not str(s3_prefix).strip():
+        raise ValueError("Missing required config value: s3_prefix")
     if not mm_name or not str(mm_name).strip():
         raise ValueError("Missing required config value: mm_name")
 
-    mm_name = str(mm_name).strip()
+    s3_bucket = str(s3_bucket).strip()
+    s3_prefix = str(s3_prefix).strip().strip("/")
+    mm_name = str(mm_name).strip().strip("/")
+
+    s3_path = f"{s3_prefix}/{mm_name}"
     content_type = _get_content_type(filetype)
 
     if not os.path.isdir(local_tms_dir):
         raise FileNotFoundError(f"Local TMS directory not found: {local_tms_dir}")
 
-    bucket = "prod-msf-eo-pub-s3"
-    s3_prefix = f"MMP/{mm_name}"
-
     s3_client = get_s3_client(s3_profile)
 
     print("\nPublishing TMS to S3")
     print(f"  Local path:    {local_tms_dir}")
-    print(f"  S3 prefix:     s3://{bucket}/{s3_prefix}/")
+    print(f"  S3 prefix:     s3://{s3_bucket}/{s3_path}/")
     print(f"  Filetype:      {str(filetype).strip().lower()}")
     print(f"  Content-Type:  {content_type}")
 
-    if delete_first and _s3_prefix_exists(s3_client, bucket, s3_prefix):
+    if delete_first and _s3_prefix_exists(s3_client, s3_bucket, s3_path):
         print("  Folder already exists on S3, deleting it first...")
-        deleted_count = _delete_s3_prefix(s3_client, bucket, s3_prefix)
+        deleted_count = _delete_s3_prefix(s3_client, s3_bucket, s3_path)
         print(f"  Deleted:       {deleted_count:,} object(s)")
 
     uploaded_count = _upload_directory(
         s3_client,
         local_tms_dir,
-        bucket,
-        s3_prefix,
+        s3_bucket,
+        s3_path,
         content_type=content_type,
         max_workers=max_workers,
     )

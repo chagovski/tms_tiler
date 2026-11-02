@@ -11,3 +11,5 @@ min_zoom: 10
 max_zoom: 20
 filetype: webp # <-- webp OR png
 s3_profile: prod
+s3_bucket: prod-msf-eo-pub-s3
+s3_prefix: MMP
